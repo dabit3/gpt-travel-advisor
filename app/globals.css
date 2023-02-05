@@ -94,7 +94,31 @@ input {
   font-size: 18px;
 }
 
+.form-container {
+  width: 500px;
+}
+
+.results-container {
+  width: 800px;
+  padding-top: 30px;
+  margin:0 auto;
+}
+
 .input-button:hover {
   background-color: #a955f1;
+}
 
+@media screen and (max-width: 500px) {
+  .form-container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .results-container {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    pading-top: 20px;
+  }
 }

@@ -58,7 +58,7 @@ export default function Home() {
     <main>
       <div style={styles.container}>
         <h1 style={styles.header}>GPTravel Advisor</h1>
-        <div style={styles.formContainer}>
+        <div style={styles.formContainer} className="form-container">
           <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
           }))} />
@@ -67,7 +67,7 @@ export default function Home() {
           }))} />
           <button className="input-button"  onClick={hitAPI}>Build Itenerary</button>
         </div>
-        <div style={styles.resultsContainer}>
+        <div className="results-container">
         {
           loading && (
             <p>{message}</p>
@@ -123,14 +123,10 @@ const styles = {
   formContainer: {
     display: 'flex',
     flexDirection: 'column' as 'column',
-    width: '500px',
     margin: '30px auto 0px',
     padding: '20px',
     boxShadow: '0px 0px 12px rgba(198, 131, 255, .2)',
     borderRadius: '10px'
-  },
-  resultsContainer: {
-    padding: '30px 140px'
   },
   result: {
     color: 'white'
