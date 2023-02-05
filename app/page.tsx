@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <main>
       <div style={styles.container}>
-        <h1 style={styles.header}>GPT Travel Buddy</h1>
+        <h1 style={styles.header}>GPTravel Advisor</h1>
         <div style={styles.formContainer}>
           <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
