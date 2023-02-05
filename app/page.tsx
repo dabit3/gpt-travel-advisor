@@ -105,14 +105,17 @@ export default function Home() {
 const styles = {
   header: {
     textAlign: 'center' as 'center',
-    marginTop: '50px',
-    color: '#c683ff'
+    marginTop: '80px',
+    color: '#c683ff',
+    fontSize: '44px'
   },
   input: {
-    padding: '6px 10px',
+    padding: '10px 14px',
     marginBottom: '4px',
     outline: 'none',
-    width: '100%'
+    fontSize: '16px',
+    width: '100%',
+    borderRadius: '8px'
   },
   container: {
     padding: '20px',

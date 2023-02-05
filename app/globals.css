@@ -91,6 +91,7 @@ input {
   font-weight: bold;
   border-radius: 50px;
   transition: all .35s;
+  font-size: 18px;
 }
 
 .input-button:hover {
