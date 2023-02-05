@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <main>
-      <div style={styles.container}>
+      <div className="app-container">
         <h1 style={styles.header}>GPTravel Advisor</h1>
         <div style={styles.formContainer} className="form-container">
           <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
@@ -116,9 +116,6 @@ const styles = {
     fontSize: '16px',
     width: '100%',
     borderRadius: '8px'
-  },
-  container: {
-    padding: '20px',
   },
   formContainer: {
     display: 'flex',
