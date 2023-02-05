@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export default function Home() {
   const [request, setRequest] = useState<{days?: string, city?: string}>({})
@@ -36,13 +37,12 @@ export default function Home() {
     })
     const json2 = await response2.json()
 
-   let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
-   let itenerary = json.itenerary
-
-   console.log('pointsOfInterest: ', pointsOfInterest)
+    let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
+    let itenerary = json.itenerary
 
     pointsOfInterest.map(point => {
-      itenerary = itenerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
+      // itenerary = itenerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
+      itenerary = itenerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
     })
 
     setItenerary(itenerary)
@@ -51,6 +51,8 @@ export default function Home() {
   
   let days = itenerary.split('Day')
   days.shift()
+
+  console.log('itenerary: ', itenerary)
 
   return (
     <main>
@@ -73,11 +75,24 @@ export default function Home() {
         }
         {
           itenerary && days.map((day, index) => (
-            <p
-              key={index}
-              style={{marginBottom: '20px'}}
-              dangerouslySetInnerHTML={{__html: day}}
-            />
+            // <p
+            //   key={index}
+            //   style={{marginBottom: '20px'}}
+            //   dangerouslySetInnerHTML={{__html: `Day ${day}`}}
+            // />
+            <div style={{marginBottom: '30px'}}
+            >
+              <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: props => {
+                    return <a target="_blank" rel="no-opener" href={props.href}>{props.children}</a>
+                }
+            }}
+              >
+                {`Day ${day}`}
+                </ReactMarkdown>
+            </div>
           ))
         }
 
