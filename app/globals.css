@@ -1,9 +1,9 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono:400,500");
+
 :root {
+  background-color: #230041;
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -40,43 +40,21 @@
   --card-border-rgb: 131, 134, 135;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-
-    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-    --secondary-glow: linear-gradient(
-      to bottom right,
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0.3)
-    );
-
-    --tile-start-rgb: 2, 13, 46;
-    --tile-end-rgb: 2, 5, 19;
-    --tile-border: conic-gradient(
-      #ffffff80,
-      #ffffff40,
-      #ffffff30,
-      #ffffff20,
-      #ffffff10,
-      #ffffff10,
-      #ffffff80
-    );
-
-    --callout-rgb: 20, 20, 20;
-    --callout-border-rgb: 108, 108, 108;
-    --card-rgb: 100, 100, 100;
-    --card-border-rgb: 200, 200, 200;
-  }
+li {
+  color: white
 }
+
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: "Roboto Mono", Helvetica, sans-serif;
+
+}
+
+p {
+  color: white;
 }
 
 html,
@@ -87,21 +65,35 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
 }
 
 a {
-  color: inherit;
+  color: #c683ff;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+a p {
+  color: #c683ff;
+}
+
+input {
+  color: black;
+}
+
+.input-button {
+  margin-top: 5px;
+  border: none;
+  outline: none;
+  padding: 14px 25px;
+  cursor: pointer;
+  background-color: #c683ff;
+  color: #230041;
+  font-weight: bold;
+  border-radius: 50px;
+  transition: all .35s;
+}
+
+.input-button:hover {
+  background-color: #a955f1;
+
 }

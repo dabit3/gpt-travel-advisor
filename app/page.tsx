@@ -1,91 +1,120 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+'use client'
 
-const inter = Inter({ subsets: ['latin'] })
+import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
+  const [request, setRequest] = useState<{days?: string, city?: string}>({})
+  let [itenerary, setItenerary] = useState<string>('')
+
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  async function hitAPI() {
+    if (!request.city || !request.days) return
+    setMessage('Building itenerary...')
+    setLoading(true)
+    setItenerary('')
+
+    setTimeout(() => {
+      setMessage('Almost there ...')
+    }, 8000)
+
+    const response = await fetch('/api/get-itenerary', {
+      method: 'POST',
+      body: JSON.stringify({
+        days: request.days,
+        city: request.city
+      })
+    })
+    const json = await response.json()
+    
+    const response2 = await fetch('/api/get-points-of-interest', {
+      method: 'POST',
+      body: JSON.stringify({
+        pointsOfInterestPrompt: json.pointsOfInterestPrompt,
+      })
+    })
+    const json2 = await response2.json()
+
+   let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
+   let itenerary = json.itenerary
+
+   console.log('pointsOfInterest: ', pointsOfInterest)
+
+    pointsOfInterest.map(point => {
+      itenerary = itenerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
+    })
+
+    setItenerary(itenerary)
+    setLoading(false)
+  }
+  
+  let days = itenerary.split('Day')
+  days.shift()
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <main>
+      <div style={styles.container}>
+        <h1 style={styles.header}>GPT Travel Buddy</h1>
+        <div style={styles.formContainer}>
+          <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
+            ...request, city: e.target.value
+          }))} />
+          <input style={styles.input} placeholder="Days" onChange={e => setRequest(request => ({
+            ...request, days: e.target.value
+          }))} />
+          <button className="input-button"  onClick={hitAPI}>Build Itenerary</button>
+        </div>
+        <div style={styles.resultsContainer}>
+        {
+          loading && (
+            <p>{message}</p>
+          )
+        }
+        {
+          itenerary && days.map((day, index) => (
+            <p
+              key={index}
+              style={{marginBottom: '20px'}}
+              dangerouslySetInnerHTML={{__html: day}}
             />
-          </a>
+          ))
+        }
+
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
       </div>
     </main>
   )
+}
+
+const styles = {
+  header: {
+    textAlign: 'center' as 'center',
+    marginTop: '50px',
+    color: '#c683ff'
+  },
+  input: {
+    padding: '6px 10px',
+    marginBottom: '4px',
+    outline: 'none',
+    width: '100%'
+  },
+  container: {
+    padding: '20px',
+  },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    width: '500px',
+    margin: '30px auto 0px',
+    padding: '20px',
+    boxShadow: '0px 0px 12px rgba(198, 131, 255, .2)',
+    borderRadius: '10px'
+  },
+  resultsContainer: {
+    padding: '30px 140px'
+  },
+  result: {
+    color: 'white'
+  }
 }
