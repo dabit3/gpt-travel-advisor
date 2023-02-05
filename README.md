@@ -6,7 +6,6 @@ Configure API keys in `.env.local`:
 
 ```
 GPT_API_KEY=open-ai-api-GPT_API_KEY
-GS_KEY=google-custom-search-api-key
 ```
 
 ### To run the app
