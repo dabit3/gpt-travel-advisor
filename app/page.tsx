@@ -17,8 +17,12 @@ export default function Home() {
     setItenerary('')
 
     setTimeout(() => {
+      setMessage('Getting closer ...')
+    }, 7000)
+
+    setTimeout(() => {
       setMessage('Almost there ...')
-    }, 8000)
+    }, 15000)
 
     const response = await fetch('/api/get-itenerary', {
       method: 'POST',
@@ -50,9 +54,12 @@ export default function Home() {
   }
   
   let days = itenerary.split('Day')
-  days.shift()
 
-  console.log('itenerary: ', itenerary)
+  if (days.length > 1) {
+    days.shift()
+  } else {
+    days[0] = "1" + days[0]
+  }
 
   return (
     <main>
