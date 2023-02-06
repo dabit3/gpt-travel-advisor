@@ -38,7 +38,7 @@ export default async function handler(
       })
     })
     const itenerary = await response.json()
-    const pointsOfInterestPrompt = 'Extract the main points of interest out of this text without any additional words, separated by commas: ' + itenerary.choices[0].text
+    const pointsOfInterestPrompt = 'Extract the main points of interest out of this text, with no additional words, separated by commas: ' + itenerary.choices[0].text
 
     res.status(200).json({
       message: 'success',

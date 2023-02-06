@@ -87,7 +87,9 @@ export default function Home() {
             //   style={{marginBottom: '20px'}}
             //   dangerouslySetInnerHTML={{__html: `Day ${day}`}}
             // />
-            <div style={{marginBottom: '30px'}}
+            <div
+              style={{marginBottom: '30px'}}
+              key={index}
             >
               <ReactMarkdown
               remarkPlugins={[remarkGfm]}
