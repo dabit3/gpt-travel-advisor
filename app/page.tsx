@@ -1,15 +1,81 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from "react";
+import { AccessPass, Membership, Plan } from "@whop-sdk/core";
+import { usePurchaseLink } from "@/lib/get-purchase-link";
+import { useSearchParams } from 'next/navigation';
+import { setCookie, getCookie } from "cookies-next";
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import remarkGfm from 'remark-gfm';
 
-export default function Home() {
+const RECOMMENDED_PLAN = process.env.NEXT_PUBLIC_RECOMMENDED_PLAN_ID || "";
+
+type PassGatedProps =
+  | {
+      membership: Membership;
+      pass: null;
+      plan: null;
+    }
+  | {
+      membership: null;
+      pass: AccessPass;
+      plan: Plan;
+    }
+  | {
+    membership: boolean;
+  }
+
+export default function Home({membership: initialMembership}: PassGatedProps) {
+  let [membership, setMembership] = useState(initialMembership);
+  const cookieVal = getCookie('membership')
+  if (cookieVal && !membership){
+    setMembership(true)
+  }
+  const searchParams = useSearchParams();
+  const membershipId = searchParams.get('membershipId');
   const [request, setRequest] = useState<{days?: string, city?: string}>({})
   let [itinerary, setItinerary] = useState<string>('')
+  const paidLink = usePurchaseLink(RECOMMENDED_PLAN);
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    if (!membershipId || membership) return;
+    fetchMembership();
+  }, [membershipId]);
+
+  const fetchMembership = async () => {
+    const response = await fetch("api/fetchMembership", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ membershipId }),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        throw new Error("Something went wrong");
+      })
+      .then((responseJson) => {
+        if (
+          responseJson.plan === process.env.NEXT_PUBLIC_RECOMMENDED_PLAN_ID ||
+          responseJson.plan === process.env.NEXT_PUBLIC_PAID_RECOMMENDED_PLAN_ID
+        ) {
+          setCookie("membership", true);
+          setMembership(true);
+        } else {
+          setCookie("membership", false);
+          setMembership(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   async function hitAPI() {
     if (!request.city || !request.days) return
     setMessage('Building itinerary...')
@@ -68,13 +134,21 @@ export default function Home() {
       <div className="app-container">
         <h1 style={styles.header}>GPTravel Advisor</h1>
         <div style={styles.formContainer} className="form-container">
-          <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
-            ...request, city: e.target.value
-          }))} />
-          <input style={styles.input} placeholder="Days" onChange={e => setRequest(request => ({
-            ...request, days: e.target.value
-          }))} />
-          <button className="input-button"  onClick={hitAPI}>Build Itinerary</button>
+        {membership ? (
+            <>
+            <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
+              ...request, city: e.target.value
+            }))} />
+            <input style={styles.input} placeholder="Days" onChange={e => setRequest(request => ({
+              ...request, days: e.target.value
+            }))} />
+            <button className="input-button"  onClick={hitAPI}>Build Itinerary</button>
+            </>
+            ) : (
+              <a href={paidLink}>
+                <button className="input-button">Get Access for $5</button>
+              </a>
+            )}
         </div>
         <div className="results-container">
         {

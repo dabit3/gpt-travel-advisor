@@ -92,6 +92,7 @@ input {
   border-radius: 50px;
   transition: all .35s;
   font-size: 18px;
+  width: 100%;
 }
 
 .app-container {
