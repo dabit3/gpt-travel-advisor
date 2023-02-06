@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 type Data = {
   message: string,
   pointsOfInterestPrompt: any,
-  itenerary: any,
+  itinerary: any,
 }
 
 const GPT_KEY = process.env.GPT_API_KEY
@@ -25,7 +25,7 @@ export default async function handler(
     city = body.city
   }
 
-  let basePrompt = `what is an ideal itenerary for ${days} days in ${city}?`
+  let basePrompt = `what is an ideal itinerary for ${days} days in ${city}?`
   try {
     const response = await fetch('https://api.openai.com/v1/completions', {
       method: 'POST',
@@ -37,13 +37,13 @@ export default async function handler(
         max_tokens: 600
       })
     })
-    const itenerary = await response.json()
-    const pointsOfInterestPrompt = 'Extract the main points of interest out of this text, with no additional words, separated by commas: ' + itenerary.choices[0].text
+    const itinerary = await response.json()
+    const pointsOfInterestPrompt = 'Extract the main points of interest out of this text, with no additional words, only the names of the locations, separated by commas: ' + itinerary.choices[0].text
 
     res.status(200).json({
       message: 'success',
       pointsOfInterestPrompt,
-      itenerary: itenerary.choices[0].text
+      itinerary: itinerary.choices[0].text
     })
 
   } catch (err) {

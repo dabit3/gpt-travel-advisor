@@ -6,15 +6,15 @@ import remarkGfm from 'remark-gfm'
 
 export default function Home() {
   const [request, setRequest] = useState<{days?: string, city?: string}>({})
-  let [itenerary, setItenerary] = useState<string>('')
+  let [itinerary, setItinerary] = useState<string>('')
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   async function hitAPI() {
     if (!request.city || !request.days) return
-    setMessage('Building itenerary...')
+    setMessage('Building itinerary...')
     setLoading(true)
-    setItenerary('')
+    setItinerary('')
 
     setTimeout(() => {
       setMessage('Getting closer ...')
@@ -24,7 +24,7 @@ export default function Home() {
       setMessage('Almost there ...')
     }, 15000)
 
-    const response = await fetch('/api/get-itenerary', {
+    const response = await fetch('/api/get-itinerary', {
       method: 'POST',
       body: JSON.stringify({
         days: request.days,
@@ -42,18 +42,20 @@ export default function Home() {
     const json2 = await response2.json()
 
     let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
-    let itenerary = json.itenerary
+    let itinerary = json.itinerary
+
+    console.log('pointsOfInterest: ', pointsOfInterest)
 
     pointsOfInterest.map(point => {
-      // itenerary = itenerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
-      itenerary = itenerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
+      // itinerary = itinerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
+      itinerary = itinerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
     })
 
-    setItenerary(itenerary)
+    setItinerary(itinerary)
     setLoading(false)
   }
   
-  let days = itenerary.split('Day')
+  let days = itinerary.split('Day')
 
   if (days.length > 1) {
     days.shift()
@@ -72,7 +74,7 @@ export default function Home() {
           <input style={styles.input} placeholder="Days" onChange={e => setRequest(request => ({
             ...request, days: e.target.value
           }))} />
-          <button className="input-button"  onClick={hitAPI}>Build Itenerary</button>
+          <button className="input-button"  onClick={hitAPI}>Build Itinerary</button>
         </div>
         <div className="results-container">
         {
@@ -81,7 +83,7 @@ export default function Home() {
           )
         }
         {
-          itenerary && days.map((day, index) => (
+          itinerary && days.map((day, index) => (
             // <p
             //   key={index}
             //   style={{marginBottom: '20px'}}
