@@ -25,6 +25,10 @@ export default async function handler(
     city = body.city
   }
 
+  if (days > 10) {
+    days = 10
+  }
+
   let basePrompt = `what is an ideal itinerary for ${days} days in ${city}?`
   try {
     const response = await fetch('https://api.openai.com/v1/completions', {
