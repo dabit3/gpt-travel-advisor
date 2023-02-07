@@ -1,0 +1,4 @@
+# These are supported funding model platforms
+
+github: [dabit3]
+custom: ["https://etherscan.io/enslookup-search?search=sha.eth", "https://polygonscan.com/address/0xB2Ebc9b3a788aFB1E942eD65B59E9E49A1eE500D"]
