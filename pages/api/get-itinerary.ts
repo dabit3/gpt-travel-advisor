@@ -38,14 +38,11 @@ export default async function handler(
         model: 'text-davinci-003',
         prompt: basePrompt,
         temperature: 0,
-        max_tokens: 600
+        max_tokens: 550
       })
     })
     const itinerary = await response.json()
-
-    console.log('itinerary: ', itinerary)
-
-    const pointsOfInterestPrompt = 'Extract the main points of interest out of this text, with no additional words, only the names of the locations, separated by commas: ' + itinerary.choices[0].text
+    const pointsOfInterestPrompt = 'Extract the points of interest out of this text, with no additional words, separated by commas: ' + itinerary.choices[0].text
 
     res.status(200).json({
       message: 'success',

@@ -31,8 +31,6 @@ export default async function handler(
 
   let pointsOfInterest = await response2.json()
 
-  console.log('pointsOfInterest: ', pointsOfInterest)
-
   pointsOfInterest = pointsOfInterest.choices[0].text.split('\n')
   pointsOfInterest = pointsOfInterest[pointsOfInterest.length - 1]
   pointsOfInterest = pointsOfInterest.split(',')

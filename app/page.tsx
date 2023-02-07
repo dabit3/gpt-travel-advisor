@@ -44,8 +44,6 @@ export default function Home() {
     let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
     let itinerary = json.itinerary
 
-    console.log('pointsOfInterest: ', pointsOfInterest)
-
     pointsOfInterest.map(point => {
       // itinerary = itinerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
       itinerary = itinerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
