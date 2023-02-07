@@ -42,6 +42,9 @@ export default async function handler(
       })
     })
     const itinerary = await response.json()
+
+    console.log('itinerary: ', itinerary)
+
     const pointsOfInterestPrompt = 'Extract the main points of interest out of this text, with no additional words, only the names of the locations, separated by commas: ' + itinerary.choices[0].text
 
     res.status(200).json({
