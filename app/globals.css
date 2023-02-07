@@ -136,7 +136,7 @@ input {
 
 .results-container {
   width: 800px;
-  padding-top: 30px;
+  padding-top: 55px;
   margin:0 auto;
 }
 
@@ -153,8 +153,8 @@ input {
 @media screen and (max-width: 900px) {
   .results-container {
     width: 100%;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 30px;
   }
 }
