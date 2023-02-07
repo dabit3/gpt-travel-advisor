@@ -21,46 +21,53 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   async function hitAPI() {
-    if (!request.city || !request.days) return
-    setMessage('Building itinerary...')
-    setLoading(true)
-    setItinerary('')
+    try {
+      if (!request.city || !request.days) return
+      setMessage('Building itinerary...')
+      setLoading(true)
+      setItinerary('')
 
-    setTimeout(() => {
-      setMessage('Getting closer ...')
-    }, 7000)
+      setTimeout(() => {
+        if (!loading) return
+        setMessage('Getting closer ...')
+      }, 7000)
 
-    setTimeout(() => {
-      setMessage('Almost there ...')
-    }, 15000)
+      setTimeout(() => {
+        if (!loading) return
+        setMessage('Almost there ...')
+      }, 15000)
 
-    const response = await fetch('/api/get-itinerary', {
-      method: 'POST',
-      body: JSON.stringify({
-        days: request.days,
-        city: request.city
+      const response = await fetch('/api/get-itinerary', {
+        method: 'POST',
+        body: JSON.stringify({
+          days: request.days,
+          city: request.city
+        })
       })
-    })
-    const json = await response.json()
-    
-    const response2 = await fetch('/api/get-points-of-interest', {
-      method: 'POST',
-      body: JSON.stringify({
-        pointsOfInterestPrompt: json.pointsOfInterestPrompt,
+      const json = await response.json()
+      
+      const response2 = await fetch('/api/get-points-of-interest', {
+        method: 'POST',
+        body: JSON.stringify({
+          pointsOfInterestPrompt: json.pointsOfInterestPrompt,
+        })
       })
-    })
-    const json2 = await response2.json()
+      const json2 = await response2.json()
 
-    let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
-    let itinerary = json.itinerary
+      let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
+      let itinerary = json.itinerary
 
-    pointsOfInterest.map(point => {
-      // itinerary = itinerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
-      itinerary = itinerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
-    })
+      pointsOfInterest.map(point => {
+        // itinerary = itinerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
+        itinerary = itinerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
+      })
 
-    setItinerary(itinerary)
-    setLoading(false)
+      setItinerary(itinerary)
+      setLoading(false)
+    } catch (err) {
+      console.log('error: ', err)
+      setMessage('')
+    }
   }
   
   let days = itinerary.split('Day')

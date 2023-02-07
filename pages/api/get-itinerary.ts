@@ -7,6 +7,10 @@ type Data = {
   itinerary: any,
 }
 
+type Error = {
+  message: string,
+}
+
 const GPT_KEY = process.env.GPT_API_KEY
 
 const headers = {
@@ -16,7 +20,7 @@ const headers = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | Error>
 ) {
   let days = 4, city = 'Rio'
   if (req.body) {
@@ -25,6 +29,12 @@ export default async function handler(
     city = body.city
   }
 
+  const parts = city.split(' ')
+
+  if (parts.length > 5) {
+    throw new Error('please reduce size of request')
+  }
+  
   if (days > 10) {
     days = 10
   }
