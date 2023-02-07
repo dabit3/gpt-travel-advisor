@@ -1,12 +1,20 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
 export default function Home() {
   const [request, setRequest] = useState<{days?: string, city?: string}>({})
   let [itinerary, setItinerary] = useState<string>('')
+
+  useEffect(() => {
+    checkRedirect()
+  }, [])
+
+  function checkRedirect() {
+    console.log('window.location.hostname: ', window.location.hostname)
+  }
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
