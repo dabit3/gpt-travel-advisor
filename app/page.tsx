@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <main>
       <div className="app-container">
-        <h1 style={styles.header}>GPTravel Advisor</h1>
+        <h1 style={styles.header}>Travel Hero</h1>
         <div style={styles.formContainer} className="form-container">
           <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
@@ -114,9 +114,11 @@ export default function Home() {
 const styles = {
   header: {
     textAlign: 'center' as 'center',
-    marginTop: '80px',
+    marginTop: '60px',
     color: '#c683ff',
-    fontSize: '44px'
+    fontWeight: '900',
+    fontFamily: 'Poppins',
+    fontSize: '68px'
   },
   input: {
     padding: '10px 14px',
@@ -129,7 +131,7 @@ const styles = {
   formContainer: {
     display: 'flex',
     flexDirection: 'column' as 'column',
-    margin: '30px auto 0px',
+    margin: '20px auto 0px',
     padding: '20px',
     boxShadow: '0px 0px 12px rgba(198, 131, 255, .2)',
     borderRadius: '10px'
