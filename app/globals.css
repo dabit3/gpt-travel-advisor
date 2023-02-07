@@ -164,3 +164,9 @@ input {
     padding-top: 30px;
   }
 }
+
+@media screen and (max-width: 450px) {
+  .hero-header {
+    line-height: 70px;
+  }
+}
