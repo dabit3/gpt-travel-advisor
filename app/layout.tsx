@@ -3,16 +3,9 @@ import './globals.css'
 import { AnalyticsWrapper } from '@components/analytics';
 import Image from 'next/image'
 
-export const RobotoMono = Roboto_Mono({
+const RobotoMono = Roboto_Mono({
   subsets: ['latin']
 })
-
-export const PoppinsFont = Poppins({
-  weight: ['800', '900'],
-  subsets: ['latin'],
-  display: 'swap'
-})
-
 
 export default function RootLayout({
   children,
