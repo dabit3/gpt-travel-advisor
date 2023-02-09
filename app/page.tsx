@@ -4,7 +4,14 @@ import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import LoadingDots from '@components/LoadingDots';
-import { PoppinsFont } from './layout';
+import { Poppins } from '@next/font/google'
+
+
+const PoppinsFont = Poppins({
+  weight: ['800', '900'],
+  subsets: ['latin'],
+  display: 'swap'
+})
 
 export default function Home() {
   const [request, setRequest] = useState<{ days?: string, city?: string }>({})
