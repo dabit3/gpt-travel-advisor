@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import LoadingDots from '@components/LoadingDots';
+import { PoppinsFont } from './layout';
 
 export default function Home() {
   const [request, setRequest] = useState<{ days?: string, city?: string }>({})
@@ -63,7 +64,7 @@ export default function Home() {
   return (
     <main>
       <div className="app-container">
-        <h1 style={styles.header} className="hero-header">Travel Hero</h1>
+        <h1 style={styles.header} className={`hero-header ${PoppinsFont.className}`}>Travel Hero</h1>
         <div style={styles.formContainer} className="form-container">
           <input style={styles.input} placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
@@ -108,7 +109,7 @@ const styles = {
     marginTop: '60px',
     color: '#c683ff',
     fontWeight: '900',
-    fontFamily: 'Poppins',
+    // fontFamily: 'Poppins',
     fontSize: '68px'
   },
   input: {

@@ -1,10 +1,16 @@
-import { Roboto_Mono } from '@next/font/google'
+import { Roboto_Mono, Poppins } from '@next/font/google'
 import './globals.css'
 import { AnalyticsWrapper } from '@components/analytics';
 import Image from 'next/image'
 
-const RobotoMono = Roboto_Mono({
+export const RobotoMono = Roboto_Mono({
   subsets: ['latin']
+})
+
+export const PoppinsFont = Poppins({
+  weight: ['800', '900'],
+  subsets: ['latin'],
+  display: 'swap'
 })
 
 
