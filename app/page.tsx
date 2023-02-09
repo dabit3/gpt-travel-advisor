@@ -3,10 +3,19 @@
 import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import LoadingDots from '@components/LoadingDots';
+import { Poppins } from '@next/font/google'
+
+
+const PoppinsFont = Poppins({
+  weight: ['800', '900'],
+  subsets: ['latin'],
+  display: 'swap'
+})
 
 export default function Home() {
-  const [request, setRequest] = useState<{days?: string, city?: string}>({})
-  let [itinerary, setItinerary] = useState<string>('')
+  const [request, setRequest] = useState<{ days?: string, city?: string }>({})
+  const [itinerary, setItinerary] = useState<string>('')
 
   useEffect(() => {
     checkRedirect()
@@ -20,56 +29,47 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
-  async function hitAPI() {
-    try {
-      if (!request.city || !request.days) return
-      setMessage('Building itinerary...')
-      setLoading(true)
-      setItinerary('')
 
-      setTimeout(() => {
-        if (!loading) return
-        setMessage('Getting closer ...')
-      }, 7000)
+  const hitAPI = async () => {
+    if (!request.city || !request.days) return
+    setLoading(true)
+    setItinerary('')
 
-      setTimeout(() => {
-        if (!loading) return
-        setMessage('Almost there ...')
-      }, 15000)
-
-      const response = await fetch('/api/get-itinerary', {
-        method: 'POST',
-        body: JSON.stringify({
-          days: request.days,
-          city: request.city
-        })
+    const response = await fetch('/api/get-itinerary', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        days: request.days,
+        city: request.city
       })
-      const json = await response.json()
-      
-      const response2 = await fetch('/api/get-points-of-interest', {
-        method: 'POST',
-        body: JSON.stringify({
-          pointsOfInterestPrompt: json.pointsOfInterestPrompt,
-        })
-      })
-      const json2 = await response2.json()
+    })
 
-      let pointsOfInterest = JSON.parse(json2.pointsOfInterest)
-      let itinerary = json.itinerary
-
-      pointsOfInterest.map(point => {
-        // itinerary = itinerary.replace(point, `<a target="_blank" rel="no-opener" href="https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)}">${point}</a>`)
-        itinerary = itinerary.replace(point, `[${point}](https://www.google.com/search?q=${encodeURIComponent(point + ' ' + request.city)})`)
-      })
-
-      setItinerary(itinerary)
-      setLoading(false)
-    } catch (err) {
-      console.log('error: ', err)
-      setMessage('')
+    if (!response.ok) {
+      setMessage('Something went wrong. Please try again.')
     }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setItinerary((prev) => prev + chunkValue);
+    }
+
+    setLoading(false)
   }
-  
+
   let days = itinerary.split('Day')
 
   if (days.length > 1) {
@@ -81,47 +81,39 @@ export default function Home() {
   return (
     <main>
       <div className="app-container">
-        <h1 style={styles.header} className="hero-header">Roam Around</h1>
+        <h1 style={styles.header} className={`hero-header ${PoppinsFont.className}`}>Roam Around</h1>
         <div style={styles.formContainer} className="form-container">
-          <input style={styles.input}  placeholder="City" onChange={e => setRequest(request => ({
+          <input style={styles.input} placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
           }))} />
           <input style={styles.input} placeholder="Days" onChange={e => setRequest(request => ({
             ...request, days: e.target.value
           }))} />
-          <button className="input-button"  onClick={hitAPI}>Build Itinerary</button>
+          {loading ? (
+            <button className="input-button">
+              <LoadingDots color="white" style="large" />
+            </button>
+          ) : (
+            <button className="input-button" onClick={hitAPI}>Build Itinerary</button>
+          )}
         </div>
         <div className="results-container">
-        {
-          loading && (
-            <p>{message}</p>
-          )
-        }
-        {
-          itinerary && days.map((day, index) => (
-            // <p
-            //   key={index}
-            //   style={{marginBottom: '20px'}}
-            //   dangerouslySetInnerHTML={{__html: `Day ${day}`}}
-            // />
-            <div
-              style={{marginBottom: '30px'}}
-              key={index}
-            >
-              <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                a: props => {
-                    return <a target="_blank" rel="no-opener" href={props.href}>{props.children}</a>
-                }
-            }}
-              >
-                {`Day ${day}`}
-                </ReactMarkdown>
-            </div>
-          ))
-        }
-
+          {
+            message && (
+              <p>{message}</p>
+            )
+          }
+          <div className="space-y-8 my-10">
+            {
+              itinerary && days.map((day, index) => (
+                <div
+                  key={index}
+                  className='text-white'
+                  dangerouslySetInnerHTML={{ __html: `Day ${day}` }}
+                />
+              ))
+            }
+          </div>
         </div>
       </div>
     </main>
@@ -134,7 +126,7 @@ const styles = {
     marginTop: '60px',
     color: '#c683ff',
     fontWeight: '900',
-    fontFamily: 'Poppins',
+    // fontFamily: 'Poppins',
     fontSize: '68px'
   },
   input: {

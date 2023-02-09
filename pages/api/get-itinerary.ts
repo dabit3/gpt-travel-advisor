@@ -1,32 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { OpenAIStream, OpenAIStreamPayload } from '@/utils/OpenAIStream'
 
-type Data = {
-  message: string,
-  pointsOfInterestPrompt: any,
-  itinerary: any,
+export const config = {
+  runtime: "edge",
 }
 
-type Error = {
-  message: string,
-}
-
-const GPT_KEY = process.env.GPT_API_KEY
-
-const headers = {
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${GPT_KEY}`
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data | Error>
-) {
-  let days = 4, city = 'Rio'
-  if (req.body) {
-    let body = JSON.parse(req.body)
-    days = body.days
-    city = body.city
+const handler = async (req: Request): Promise<Response> => {
+  let { days = 4, city = 'Rio' } = (await req.json()) as {
+    days?: number;
+    city?: string;
   }
 
   const parts = city.split(' ')
@@ -39,28 +21,22 @@ export default async function handler(
     days = 10
   }
 
-  let basePrompt = `what is an ideal itinerary for ${days} days in ${city}?`
-  try {
-    const response = await fetch('https://api.openai.com/v1/completions', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: 'text-davinci-003',
-        prompt: basePrompt,
-        temperature: 0,
-        max_tokens: 550
-      })
-    })
-    const itinerary = await response.json()
-    const pointsOfInterestPrompt = 'Extract the points of interest out of this text, with no additional words, separated by commas: ' + itinerary.choices[0].text
+  let basePrompt = `What is an ideal itinerary for ${days} days in ${city}? Describe my days as a guide and put the points of interest name linked to google url search of that point of interest (e.g. <a href="https://www.google.com/search?q=point+of+interest) rel="no-opener" target="_blank">POINTS OF INTEREST NAME</a>">`
 
-    res.status(200).json({
-      message: 'success',
-      pointsOfInterestPrompt,
-      itinerary: itinerary.choices[0].text
-    })
+  const payload: OpenAIStreamPayload = {
+    model: "text-davinci-003",
+    prompt: basePrompt,
+    temperature: 0.5,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    max_tokens: 550,
+    stream: true,
+    n: 1,
+  };
 
-  } catch (err) {
-    console.log('error: ', err)
-  }
+  const stream = await OpenAIStream(payload);
+  return new Response(stream);
 }
+
+export default handler;
