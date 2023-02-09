@@ -74,11 +74,7 @@ export default function Home() {
   return (
     <main>
       <div className="app-container">
-<<<<<<< HEAD
-        <h1 style={styles.header} className={`hero-header ${PoppinsFont.className}`}>Travel Hero</h1>
-=======
-        <h1 style={styles.header} className="hero-header">Roam Around</h1>
->>>>>>> 03f24bcd8fd2d963e996fb09eaf7803b06a55bb0
+        <h1 style={styles.header} className={`hero-header ${PoppinsFont.className}`}>Roam Around</h1>
         <div style={styles.formContainer} className="form-container">
           <input style={styles.input} placeholder="City" onChange={e => setRequest(request => ({
             ...request, city: e.target.value
