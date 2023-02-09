@@ -11,6 +11,12 @@ const handler = async (req: Request): Promise<Response> => {
     city?: string;
   }
 
+  const parts = city.split(' ')
+
+  if (parts.length > 5) {
+    throw new Error('please reduce size of request')
+  }
+  
   if (days > 10) {
     days = 10
   }
