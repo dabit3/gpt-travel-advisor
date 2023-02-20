@@ -1,5 +1,7 @@
-# GPT Travel advisor
+# GPT Travel advisor - "*Discover your next adventure with ease*"
 
+## Description 
+This project allows you to quickly and easily create a travel itinerary for any city in the world. Simply enter the city you're interested in, and GPT will generate a custom itinerary for you based on your input.
 ### Requirements
 
 Get API Key [here](https://openai.com/api/)
