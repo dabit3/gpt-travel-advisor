@@ -72,7 +72,7 @@ export default function Home() {
       },
       bounty: {
         message: "Great! Please tell me more about your bounty.",
-        component: <Bounty choiceColor={choiceColor} setHackatonData={setHackatonData} hackatonData={hackatonData} />
+        component: <Bounty choiceColor={choiceColor} setBountyData={setBountyData} bountyData={bountyData} />
       }
     },
     {
