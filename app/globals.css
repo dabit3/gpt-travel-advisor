@@ -2,6 +2,8 @@
 
 :root {
   --bg: #17171C;
+  --hackathonColor: #4329A6;
+  --bountyColor: #4250E4;
 }
 
 li {
@@ -35,6 +37,7 @@ body {
   padding: 23px 60px;
   gap: 10px;
   max-width: max-content;
+  cursor: pointer;
 
   background: #595959;
   border-radius: 50px;
@@ -50,7 +53,12 @@ body {
   transition-timing-function: cubic-bezier(0.08,0.52,0.52,1);
 }
 
-.button:hover {
+.button:disabled {
+  filter: brightness(50%);
+  cursor: auto;
+}
+
+.button:hover:not(:disabled) {
   filter: brightness(85%);
 }
 

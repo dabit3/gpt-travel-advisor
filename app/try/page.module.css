@@ -1,0 +1,69 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.subContainer {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 30px;
+}
+
+.componentContainer {
+  width: 100%;
+}
+
+.container .btnsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.container .avatar {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 20px;
+  
+  padding: 30px;
+
+  color: #fff;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 29px;
+  text-align: left;
+}
+
+.container .avatar span {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid #4329A6; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #4329A6; }
+}

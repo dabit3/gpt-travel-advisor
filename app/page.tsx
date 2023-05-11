@@ -13,7 +13,7 @@ export default function Home() {
           <p className={styles.bigText}>TRANSFORMING YOUR IDEAS INTO ENGAGING HACKATHONS & BOUNTIES EFFORTLESSLY AND PLAYFULLY</p>
           <Link
               className={`button ${styles.button}`}
-              href="/choice"
+              href="/try"
             >
               Try it now !
             </Link>
